@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { FavoritesViewComponent } from './favorites-view.component';
+import { FavoritesViewComponent } from "./favorites.component";
 
-describe('FavoritesViewComponent', () => {
+describe("FavoritesViewComponent", () => {
   let component: FavoritesViewComponent;
   let fixture: ComponentFixture<FavoritesViewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FavoritesViewComponent]
+      declarations: [FavoritesViewComponent],
     });
     fixture = TestBed.createComponent(FavoritesViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

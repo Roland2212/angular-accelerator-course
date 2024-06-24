@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {SearchViewComponent} from './search-view/search-view.component';
-import {FavoritesViewComponent} from "./favorites-view/favorites-view.component";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { SearchViewComponent } from "./views/search/search.component";
+import { FavoritesViewComponent } from "./views/favorites/favorites.component";
 
 const routes: Routes = [
-  {path: "", component: SearchViewComponent},
-  {path: "favorites", component: FavoritesViewComponent}
+  { path: "", component: SearchViewComponent },
+  { path: "favorites", component: FavoritesViewComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
