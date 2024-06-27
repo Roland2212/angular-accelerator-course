@@ -1,46 +1,41 @@
 import { Component, OnInit } from "@angular/core";
-import { TvShowTableComponent } from "../../components/tv-show-table/tv-show-table.component";
 import { TVShowService } from "../../services/tv-show.service";
-import { BehaviorSubject, Observable, tap } from "rxjs";
-import { TVShow } from "../../interfaces/tv-show.interface";
+import { Observable, ReplaySubject } from "rxjs";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { GenericTableComponent } from "../../components/generic-table/generic-table.component";
+import { TVShowsTable } from "../../interfaces/tv-show.interface";
+import { TV_SHOWS_TABLE_COLUMNS } from "./search.config";
 
 @Component({
   selector: "app-search-view",
   standalone: true,
-  imports: [TvShowTableComponent, ReactiveFormsModule],
+  imports: [GenericTableComponent, ReactiveFormsModule],
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.css"],
 })
 export class SearchViewComponent implements OnInit {
-  private _tvShowsSubject$ = new BehaviorSubject<TVShow[]>([]);
+  private _filter$ = new ReplaySubject<string>();
 
-  filterControl = new FormControl("");
+  tableColumns = TV_SHOWS_TABLE_COLUMNS;
 
-  get tvShows$(): Observable<TVShow[]> {
-    return this._tvShowsSubject$.asObservable();
+  filterControl = new FormControl<string>("");
+
+  get tvShowsTable$(): (query: string, page: number) => Observable<TVShowsTable> {
+    return (query: string, page: number) => this.tvShowService.getTVShowsTable(query, page);
+  }
+
+  get filter$(): Observable<string> {
+    return this._filter$.asObservable();
   }
 
   constructor(private tvShowService: TVShowService) {}
 
   ngOnInit(): void {
-    this._getTVShowsTable();
+    this.onSearchTVShows();
   }
 
-  onFilterTVShows(): void {
-    const query = this.filterControl.value || "";
-    this._getTVShowsTable(query);
-  }
-
-  private _getTVShowsTable(query: string = "", page: number = 1): void {
-    this.tvShowService
-      .getTVShows(query, page)
-      .pipe(
-        tap((data) => {
-          const { tv_shows } = data;
-          this._tvShowsSubject$.next(tv_shows);
-        })
-      )
-      .subscribe();
+  onSearchTVShows(): void {
+    const filter = this.filterControl.value || "";
+    this._filter$.next(filter);
   }
 }

@@ -6,14 +6,21 @@
           <legend>TV Show Search</legend>
           <label for="name">Name</label>
           <input type="text" id="name" placeholder="Name of the show" [formControl]="filterControl" />
-          <button type="button" class="primary" (click)="onFilterTVShows()">Search</button>
+          <button type="button" class="primary" (click)="onSearchTVShows()">Search</button>
         </fieldset>
       </form>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <app-tv-show-table [tvShows$]="tvShows$"></app-tv-show-table>
+      <app-generic-table [columns]="tableColumns" [templates]="{ actions }" [data$]="tvShowsTable$" [filter$]="filter$">
+      </app-generic-table>
     </div>
   </div>
 </div>
+
+<ng-template #actions>
+  <span class="icon-info"></span>
+  <span class="icon-bookmark highlight"></span>
+  <span class="icon-link"></span>
+</ng-template>

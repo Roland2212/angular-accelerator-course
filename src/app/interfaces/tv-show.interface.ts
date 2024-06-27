@@ -1,3 +1,5 @@
+import { Table } from "./generic-table.interface";
+
 export interface TVShow {
   id: number;
   name: string;
@@ -6,13 +8,12 @@ export interface TVShow {
   end_date: string | null;
   country: string;
   network: string;
-  status: string;
+  status: Status;
   image_thumbnail_path: string;
 }
 
-export interface TVShowsTable {
-  page: number;
-  pages: number;
-  total: string;
+export type Status = "Ended" | "Canceled/Ended" | "Running" | "New Series" | "In Development" | "To Be Determined";
+
+export interface TVShowsTable extends Table<TVShow> {
   tv_shows: TVShow[];
 }

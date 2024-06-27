@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, tap } from "rxjs";
+import { Observable, map, tap } from "rxjs";
 import { TVShow, TVShowsTable } from "../interfaces/tv-show.interface";
 import { HttpClient } from "@angular/common/http";
 
@@ -9,7 +9,14 @@ import { HttpClient } from "@angular/common/http";
 export class TVShowService {
   constructor(private http: HttpClient) {}
 
-  getTVShows(query: string, page: number): Observable<TVShowsTable> {
-    return this.http.get<TVShowsTable>(`https://www.episodate.com/api/search?q=${query}&page=${page}`);
+  getTVShowsTable(query: string, page: number): Observable<TVShowsTable> {
+    return this.http.get<TVShowsTable>(`https://www.episodate.com/api/search?q=${query}&page=${page}`).pipe(
+      map((tableData) => {
+        return {
+          ...tableData,
+          data: tableData.tv_shows,
+        };
+      })
+    );
   }
 }
