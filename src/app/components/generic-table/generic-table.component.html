@@ -5,16 +5,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of dataSource">
-      <td *ngFor="let column of columns">
-        <ng-container *ngIf="column.type === TableColumnType.DEFAULT">
-          {{ data[column.key] }}
-        </ng-container>
-        <ng-container *ngIf="column.type === TableColumnType.TEMPLATE">
-          <ng-container *ngTemplateOutlet="templates[column.key]"></ng-container>
-        </ng-container>
-      </td>
-    </tr>
+    <ng-container *ngIf="dataSource.length; else noData">
+      <tr *ngFor="let data of dataSource">
+        <td *ngFor="let column of columns">
+          <ng-container *ngIf="column.type === TableColumnType.DEFAULT">
+            {{ data[column.key] }}
+          </ng-container>
+          <ng-container *ngIf="column.type === TableColumnType.TEMPLATE">
+            <ng-container *ngTemplateOutlet="templates[column.key]; context: { data }"></ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-container>
 
     <ng-container *ngIf="isLoading">
       <div class="loading-container">
@@ -24,3 +26,9 @@
   </tbody>
   <tfoot></tfoot>
 </table>
+
+<ng-template #noData>
+  <tr>
+    <td class="no-data">No data</td>
+  </tr>
+</ng-template>

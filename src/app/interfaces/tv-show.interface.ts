@@ -1,6 +1,6 @@
 import { Table } from "./generic-table.interface";
 
-export interface TVShow {
+export interface TvShow {
   id: number;
   name: string;
   permalink: string;
@@ -14,6 +14,6 @@ export interface TVShow {
 
 export type Status = "Ended" | "Canceled/Ended" | "Running" | "New Series" | "In Development" | "To Be Determined";
 
-export interface TVShowsTable extends Table<TVShow> {
-  tv_shows: TVShow[];
+export interface TvShowsTable extends Table<TvShow> {
+  tv_shows: TvShow[];
 }
