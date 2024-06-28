@@ -1,0 +1,41 @@
+<div class="tv-show-details">
+  <button class="small" (click)="onNavigateBack()">Back</button>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card fluid">
+        <div class="section">
+          <h3>
+            {{ tvShow.name }}
+          </h3>
+        </div>
+        <img [src]="tvShow.image_path" class="section media" />
+        <div class="section">
+          <h4>
+            Rating: {{ tvShow.rating | number : "1.1-2" }} / 10
+            <small>(rated by {{ tvShow.rating_count }} people)</small>
+          </h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="card fluid">
+        <div class="section">
+          <h3>
+            Description
+            <small>{{ tvShow.country }} {{ tvShow.start_date | date : "yyyy" }}</small>
+          </h3>
+          <h3>
+            <small>
+              {{ tvShow | countSeasons | i18nPlural : { "=0": "No seasons", "=1": "1 Season", other: "# Seasons" } }}
+              -
+              {{
+                tvShow.episodes.length | i18nPlural : { "=0": "No episodes", "=1": "1 Episode", other: "# Episodes" }
+              }}
+            </small>
+          </h3>
+        </div>
+        <div class="section" [innerHTML]="tvShow.description"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,6 @@ import { GenericTableComponent } from "../../components/generic-table/generic-ta
   standalone: true,
   imports: [GenericTableComponent],
   templateUrl: "./favorites.component.html",
-  styleUrls: ["./favorites.component.css"],
+  styleUrl: "./favorites.component.css",
 })
 export class FavoritesViewComponent {}

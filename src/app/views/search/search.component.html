@@ -20,7 +20,7 @@
 </div>
 
 <ng-template #actions let-data="data">
-  <span class="icon-info"></span>
+  <span class="icon-info" (click)="onNavigateToDetails(data)"></span>
   <span class="icon-bookmark" [class.highlight]="data | favorite : favoriteTvShows" (click)="onToggleFavorites(data)">
   </span>
   <span class="icon-link"></span>

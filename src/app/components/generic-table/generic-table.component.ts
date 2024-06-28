@@ -9,7 +9,7 @@ import { GenericObject } from "../../interfaces/generic-type.interface";
   standalone: true,
   imports: [CommonModule],
   templateUrl: "./generic-table.component.html",
-  styleUrls: ["./generic-table.component.css"],
+  styleUrl: "./generic-table.component.css",
 })
 export class GenericTableComponent<T extends GenericObject, U extends Table<T>> implements OnInit {
   @Input() columns!: TableColumn[];
