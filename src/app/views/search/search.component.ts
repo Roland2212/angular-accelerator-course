@@ -3,20 +3,21 @@ import { TvShowService } from "../../services/tv-show.service";
 import { Observable, ReplaySubject } from "rxjs";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { GenericTableComponent } from "../../components/generic-table/generic-table.component";
-import { TvShowBase, TvShowsTable } from "../../interfaces/tv-show.interface";
+import { TvShowsTable } from "../../interfaces/tv-show.interface";
 import { TV_SHOWS_TABLE_COLUMNS } from "./search.config";
-import { FavoritePipe } from "../../pipe/favorite.pipe";
+import { IsFavoritePipe } from "../../pipe/is-favorite.pipe";
 import { Router } from "@angular/router";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-search-view",
   standalone: true,
-  imports: [ReactiveFormsModule, GenericTableComponent, FavoritePipe],
+  imports: [ReactiveFormsModule, GenericTableComponent, IsFavoritePipe, AsyncPipe],
   templateUrl: "./search.component.html",
   styleUrl: "./search.component.css",
 })
 export class SearchViewComponent implements OnInit {
-  private _filter$ = new ReplaySubject<string>();
+  private _filterSubject$ = new ReplaySubject<string>();
 
   tableColumns = TV_SHOWS_TABLE_COLUMNS;
 
@@ -27,11 +28,11 @@ export class SearchViewComponent implements OnInit {
   }
 
   get filter$(): Observable<string> {
-    return this._filter$.asObservable();
+    return this._filterSubject$.asObservable();
   }
 
-  get favoriteTvShows(): TvShowBase[] {
-    return this.tvShowService.favoriteTvShows;
+  get favoriteTvShowsIds$(): Observable<number[]> {
+    return this.tvShowService.favoriteTvShowsIds$;
   }
 
   constructor(private tvShowService: TvShowService, private router: Router) {}
@@ -42,14 +43,14 @@ export class SearchViewComponent implements OnInit {
 
   onSearchTVShows(): void {
     const filter = this.filterControl.value || "";
-    this._filter$.next(filter);
+    this._filterSubject$.next(filter);
   }
 
-  onToggleFavorites(tvShow: TvShowBase): void {
-    this.tvShowService.toggleFavorite(tvShow);
+  onToggleFavorites(tvShowId: number): void {
+    this.tvShowService.toggleFavorite(tvShowId);
   }
 
-  onNavigateToDetails(tvShow: TvShowBase): void {
-    this.router.navigate(["details", tvShow.id]);
+  onNavigateToDetails(tvShowId: number): void {
+    this.router.navigate(["details", tvShowId]);
   }
 }

@@ -8,11 +8,17 @@ export interface TvShowBase {
   end_date: string;
   country: string;
   network: string;
-  status: Status;
+  status: TvShowStatus;
   image_thumbnail_path: string;
 }
 
-export type Status = "Ended" | "Canceled/Ended" | "Running" | "New Series" | "In Development" | "To Be Determined";
+export type TvShowStatus =
+  | "Ended"
+  | "Canceled/Ended"
+  | "Running"
+  | "New Series"
+  | "In Development"
+  | "To Be Determined";
 
 export interface TvShowsTable extends Table<TvShowBase> {
   tv_shows: TvShowBase[];

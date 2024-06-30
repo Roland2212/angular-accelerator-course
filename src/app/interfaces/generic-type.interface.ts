@@ -3,5 +3,5 @@ export interface GenericObject {
 }
 
 export interface GenericId {
-  id: string;
+  id: number;
 }

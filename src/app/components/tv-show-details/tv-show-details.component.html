@@ -1,13 +1,8 @@
-<div class="tv-show-details">
+<div class="container">
   <button class="small" (click)="onNavigateBack()">Back</button>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-lg-2 col-md-4 col-sm-12">
       <div class="card fluid">
-        <div class="section">
-          <h3>
-            {{ tvShow.name }}
-          </h3>
-        </div>
         <img [src]="tvShow.image_path" class="section media" />
         <div class="section">
           <h4>
@@ -17,11 +12,11 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-lg-10 col-md-8 col-sm-12">
       <div class="card fluid">
         <div class="section">
           <h3>
-            Description
+            {{ tvShow.name }}
             <small>{{ tvShow.country }} {{ tvShow.start_date | date : "yyyy" }}</small>
           </h3>
           <h3>

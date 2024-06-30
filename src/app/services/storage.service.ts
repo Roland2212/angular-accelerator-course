@@ -4,8 +4,8 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class StorageService<T> {
-  getItemByKey(key: string): T | null {
-    return JSON.parse(localStorage.getItem(key) || 'null');
+  getItemByKey(key: string): T {
+    return JSON.parse(localStorage.getItem(key) || '[]');
   }
 
   setItemByKey(key: string, item: T): void {
