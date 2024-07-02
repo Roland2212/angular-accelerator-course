@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { TvShowService } from "../../services/tv-show.service";
 import { CommonModule } from "@angular/common";
-import { Observable, Subscription, finalize, forkJoin, map, switchMap, tap } from "rxjs";
+import { Observable, Subscription, finalize, forkJoin, map, of, switchMap, tap } from "rxjs";
 import { TvShow } from "../../interfaces/tv-show.interface";
 import { IsFavoritePipe } from "src/app/pipe/is-favorite.pipe";
 import { Router } from "@angular/router";
@@ -71,7 +71,9 @@ export class FavoritesViewComponent implements OnInit, OnDestroy {
 
   private _mapIdsIntoFavoriteTvShowsRequests(ids: number[]): Observable<TvShow>[] {
     if (!ids.length) this.tvShows = [];
+    const favoriteTvShows = this.tvShowService.favoriteTvShows;
     return ids.map((id) => {
+      if (favoriteTvShows[id]) return of(favoriteTvShows[id]);
       return this.tvShowService.getTvShow(id);
     });
   }

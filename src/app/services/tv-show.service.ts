@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, map, shareReplay } from "rxjs";
+import { BehaviorSubject, Observable, map } from "rxjs";
 import { TvShow, TvShowDto, TvShowsTable } from "../interfaces/tv-show.interface";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
@@ -13,18 +13,21 @@ export class TvShowService {
   private _favoriteTvShowsIdsSubject$ = new BehaviorSubject<number[]>(
     this.storageService.getItemByKey(FAVORITE_TV_SHOWS_STORAGE_KEY)
   );
-
-  // private _favoriteTvShowsSubject$ = new BehaviorSubject<TvShow[]>([]);
+  private _favoriteTvShows: { [key: number]: TvShow } = {};
 
   get favoriteTvShowsIds$(): Observable<number[]> {
     return this._favoriteTvShowsIdsSubject$.asObservable();
   }
 
+  get favoriteTvShows(): { [key: number]: TvShow } {
+    return this._favoriteTvShows;
+  }
+
   constructor(private http: HttpClient, private storageService: StorageService<number[]>) {}
 
-  // setFavoriteTvShows(tvShows: TvShow[]): void {
-  //   this._favoriteTvShowsSubject$.next(tvShows);
-  // }
+  setFavoriteTvShows(tvShow: TvShow): void {
+    this._favoriteTvShows[tvShow.id] = tvShow;
+  }
 
   toggleFavorite(tvShowId: number): void {
     const favorites = this._favoriteTvShowsIdsSubject$.getValue();
@@ -48,8 +51,9 @@ export class TvShowService {
 
   getTvShow(query: number): Observable<TvShow> {
     return this.http.get<TvShowDto>(`${API_URI}/show-details?q=${query}`).pipe(
-      map((tvShowDto) => {
-        return tvShowDto.tvShow;
+      map(({ tvShow }) => {
+        this.setFavoriteTvShows(tvShow);
+        return tvShow;
       })
     );
   }
