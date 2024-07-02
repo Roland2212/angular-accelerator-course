@@ -18,3 +18,14 @@
     display: flex;
     justify-content: center;
 }
+
+tfoot {
+    display: flex;
+    width: 100%;
+}
+
+tfoot td {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

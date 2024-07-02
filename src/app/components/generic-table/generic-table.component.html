@@ -24,7 +24,15 @@
       </div>
     </ng-container>
   </tbody>
-  <tfoot></tfoot>
+  <tfoot>
+    <tr>
+      <td colspan="2">
+        Page {{ page }} of {{ pages }}
+        <button class="small" [disabled]="isLoading || page <= 1" (click)="onPreviousPage()"><</button>
+        <button class="small" [disabled]="isLoading || page >= pages" (click)="onNextPage()">></button>
+      </td>
+    </tr>
+  </tfoot>
 </table>
 
 <ng-template #noData>

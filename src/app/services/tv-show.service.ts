@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
 import { FAVORITE_TV_SHOWS_STORAGE_KEY } from "../constants/tv-show.constant";
 import { API_URI } from "../constants/api.constant";
+import { NumberKeyValue } from "../interfaces/generic-type.interface";
 
 @Injectable({
   providedIn: "root",
@@ -13,13 +14,13 @@ export class TvShowService {
   private _favoriteTvShowsIdsSubject$ = new BehaviorSubject<number[]>(
     this.storageService.getItemByKey(FAVORITE_TV_SHOWS_STORAGE_KEY)
   );
-  private _favoriteTvShows: { [key: number]: TvShow } = {};
+  private _favoriteTvShows: NumberKeyValue<TvShow> = {};
 
   get favoriteTvShowsIds$(): Observable<number[]> {
     return this._favoriteTvShowsIdsSubject$.asObservable();
   }
 
-  get favoriteTvShows(): { [key: number]: TvShow } {
+  get favoriteTvShows(): NumberKeyValue<TvShow> {
     return this._favoriteTvShows;
   }
 

@@ -5,3 +5,7 @@ export interface GenericObject {
 export interface GenericId {
   id: number;
 }
+
+export interface NumberKeyValue<T> {
+  [key: number]: T;
+}

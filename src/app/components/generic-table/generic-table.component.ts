@@ -32,6 +32,8 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
   private _pageSubject$ = new BehaviorSubject<number>(1);
 
   dataSource: T[] = [];
+  pages: number = 0;
+  page: number = 0;
   isLoading: boolean = true;
 
   get page$(): Observable<number> {
@@ -50,6 +52,18 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
     this._subscriptions$.unsubscribe();
   }
 
+  onNextPage(): void {
+    if (this.page >= this.pages) return;
+    this.page = this.page + 1;
+    this._pageSubject$.next(this.page);
+  }
+
+  onPreviousPage(): void {
+    if (this.page <= 1) return;
+    this.page = this.page - 1;
+    this._pageSubject$.next(this.page);
+  }
+
   setPage(page: number): void {
     this._pageSubject$.next(page);
   }
@@ -64,6 +78,8 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
           switchMap(([page, filter]) =>
             this.data$(filter, page).pipe(
               tap((tableData) => {
+                this.page = page;
+                this.pages = tableData.pages;
                 this.dataSource = tableData.data;
               }),
               catchError((error) => {
