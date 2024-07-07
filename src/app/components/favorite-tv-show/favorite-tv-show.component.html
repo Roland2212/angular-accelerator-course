@@ -1,0 +1,25 @@
+<div class="card fluid">
+  <div class="section header">
+    <h5>
+      {{ tvShow.name }}
+    </h5>
+    <div class="actions">
+      <span class="icon-info" (click)="onNavigateToDetails(tvShow.id)"></span>
+      <span class="icon-bookmark highlight" (click)="onToggleFavorites(tvShow.id)"></span>
+    </div>
+  </div>
+  <img [src]="tvShow.image_path" class="section media" />
+  <div class="section">
+    <p>
+      Next Episode:
+      <span *ngIf="tvShow.countdown?.air_date; else noInfo">
+        {{ tvShow.countdown.air_date || "" | date : "MMM dd y" }}
+      </span>
+    </p>
+    <p>Status: {{ tvShow.status }}</p>
+  </div>
+</div>
+
+<ng-template #noInfo>
+  <span>No info</span>
+</ng-template>

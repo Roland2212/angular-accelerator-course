@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, map } from "rxjs";
+import { BehaviorSubject, Observable, forkJoin, map, of } from "rxjs";
 import { TvShow, TvShowDto, TvShowsTable } from "../interfaces/tv-show.interface";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
-import { FAVORITE_TV_SHOWS_STORAGE_KEY } from "../constants/tv-show.constant";
+import { FAVORITE_TV_SHOWS_STORAGE_KEY, TV_SHOW_STATUSES } from "../constants/tv-show.constant";
 import { API_URI } from "../constants/api.constant";
 import { NumberKeyValue } from "../interfaces/generic-type.interface";
 
@@ -57,5 +57,41 @@ export class TvShowService {
         return tvShow;
       })
     );
+  }
+
+  getFavoritesTvShows(): Observable<TvShow[]> {
+    const tvShows$ = this._mapIdsIntoFavoriteTvShowsRequests();
+    return forkJoin(tvShows$).pipe(
+      map((shows) => {
+        return this._sortTvShows(shows);
+      })
+    );
+  }
+
+  private _mapIdsIntoFavoriteTvShowsRequests(): Observable<TvShow>[] {
+    const favoritesIds = this._favoriteTvShowsIdsSubject$.getValue();
+    if (!favoritesIds.length) return [];
+    return favoritesIds.map((id) => {
+      if (this.favoriteTvShows[id]) return of(this.favoriteTvShows[id]);
+      return this.getTvShow(id);
+    });
+  }
+
+  private _sortTvShows(tvShows: TvShow[]): TvShow[] {
+    const sortedByDate = tvShows
+      .filter((tvShow) => tvShow.countdown?.air_date)
+      .sort((a, b) => this._sortByReleaseDateFn(a, b));
+    const sortedByStatus = tvShows
+      .filter((tvShow) => !tvShow.countdown?.air_date)
+      .sort((a, b) => this._sortByStatusFn(a, b));
+    return [...sortedByDate, ...sortedByStatus];
+  }
+
+  private _sortByReleaseDateFn(a: TvShow, b: TvShow): number {
+    return Date.parse(a.countdown?.air_date || "0") - Date.parse(b.countdown?.air_date || "0");
+  }
+
+  private _sortByStatusFn(a: TvShow, b: TvShow): number {
+    return TV_SHOW_STATUSES.indexOf(b.status) - TV_SHOW_STATUSES.indexOf(a.status);
   }
 }

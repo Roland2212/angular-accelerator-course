@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, TemplateRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { NgFor, NgIf, NgTemplateOutlet } from "@angular/common";
 import {
   BehaviorSubject,
   Observable,
@@ -16,10 +16,10 @@ import { GenericObject } from "../../interfaces/generic-type.interface";
 
 @Component({
   selector: "app-generic-table",
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: "./generic-table.component.html",
   styleUrl: "./generic-table.component.css",
+  standalone: true,
+  imports: [NgIf, NgFor, NgTemplateOutlet],
 })
 export class GenericTableComponent<T extends GenericObject, U extends Table<T>> implements OnInit, OnDestroy {
   @Input() columns!: TableColumn[];

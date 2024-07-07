@@ -1,0 +1,17 @@
+.card {
+    height: 380px;   
+}
+
+.card .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card .header .actions {
+    display: flex;
+    margin: 12px 8px;
+}
+
+.card .section .media {
+    height: 200px;
+}

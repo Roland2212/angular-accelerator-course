@@ -6,10 +6,10 @@ import { CountSeasonsPipe } from "../../pipe/count-seasons.pipe";
 
 @Component({
   selector: "app-tv-show-details",
-  standalone: true,
-  imports: [DatePipe, DecimalPipe, I18nPluralPipe, CountSeasonsPipe],
   templateUrl: "./tv-show-details.component.html",
   styleUrl: "./tv-show-details.component.css",
+  standalone: true,
+  imports: [DatePipe, DecimalPipe, I18nPluralPipe, CountSeasonsPipe],
 })
 export class TvShowDetailsComponent {
   @Input() tvShow!: TvShow;

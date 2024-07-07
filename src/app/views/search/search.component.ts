@@ -11,10 +11,10 @@ import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-search-view",
-  standalone: true,
-  imports: [ReactiveFormsModule, GenericTableComponent, IsFavoritePipe, AsyncPipe],
   templateUrl: "./search.component.html",
   styleUrl: "./search.component.css",
+  standalone: true,
+  imports: [ReactiveFormsModule, GenericTableComponent, IsFavoritePipe, AsyncPipe],
 })
 export class SearchViewComponent implements OnInit {
   private _filterSubject$ = new ReplaySubject<string>();
@@ -46,7 +46,7 @@ export class SearchViewComponent implements OnInit {
     this._filterSubject$.next(filter);
   }
 
-  onToggleFavorites(tvShowId: number): void {
+  onToggleFavorite(tvShowId: number): void {
     this.tvShowService.toggleFavorite(tvShowId);
   }
 
