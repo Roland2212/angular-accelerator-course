@@ -28,8 +28,10 @@
     <tr>
       <td colspan="2">
         Page {{ page }} of {{ pages }}
+        <button class="small" [disabled]="isLoading || page <= 1" (click)="onFirstPage()"><<</button>
         <button class="small" [disabled]="isLoading || page <= 1" (click)="onPreviousPage()"><</button>
         <button class="small" [disabled]="isLoading || page >= pages" (click)="onNextPage()">></button>
+        <button class="small" [disabled]="isLoading || page >= pages" (click)="onLastPage()">>></button>
       </td>
     </tr>
   </tfoot>

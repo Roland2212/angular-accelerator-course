@@ -52,15 +52,27 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
     this._subscriptions$.unsubscribe();
   }
 
-  onNextPage(): void {
-    if (this.page >= this.pages) return;
-    this.page = this.page + 1;
+  onFirstPage(): void {
+    if (this.page <= 1) return;
+    this.page = 1;
     this._pageSubject$.next(this.page);
   }
 
   onPreviousPage(): void {
     if (this.page <= 1) return;
     this.page = this.page - 1;
+    this._pageSubject$.next(this.page);
+  }
+
+  onNextPage(): void {
+    if (this.page >= this.pages) return;
+    this.page = this.page + 1;
+    this._pageSubject$.next(this.page);
+  }
+
+  onLastPage(): void {
+    if (this.page >= this.pages) return;
+    this.page = this.pages;
     this._pageSubject$.next(this.page);
   }
 

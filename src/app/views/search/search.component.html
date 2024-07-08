@@ -24,7 +24,8 @@
   <span
     class="icon-bookmark"
     [class.highlight]="data.id | isFavorite : (favoriteTvShowsIds$ | async)"
-    (click)="onToggleFavorite(data.id)"
+    toggleFavorite
+    [id]="data.id"
   >
   </span>
   <span class="icon-link"></span>

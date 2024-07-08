@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, forkJoin, map, of } from "rxjs";
+import { BehaviorSubject, Observable, forkJoin, map, of, switchMap } from "rxjs";
 import { TvShow, TvShowDto, TvShowsTable } from "../interfaces/tv-show.interface";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "./storage.service";
-import { FAVORITE_TV_SHOWS_STORAGE_KEY, TV_SHOW_STATUSES } from "../constants/tv-show.constant";
+import { FAVORITE_TV_SHOWS_STORAGE_KEY, TV_SHOW_STATUSES_ORDER } from "../constants/tv-show.constant";
 import { API_URI } from "../constants/api.constant";
 import { NumberKeyValue } from "../interfaces/generic-type.interface";
+import { compareDesc } from "date-fns";
 
 @Injectable({
   providedIn: "root",
@@ -40,7 +41,9 @@ export class TvShowService {
   }
 
   getTvShowsTable(query: string, page: number): Observable<TvShowsTable> {
-    return this.http.get<TvShowsTable>(`${API_URI}/search?q=${query}&page=${page}`).pipe(
+    let apiUrl: string;
+    apiUrl = query ? `${API_URI}/search?q=${query}&page=${page}` : `${API_URI}/most-popular?page=${page}`;
+    return this.http.get<TvShowsTable>(apiUrl).pipe(
       map((tableData) => {
         return {
           ...tableData,
@@ -60,18 +63,21 @@ export class TvShowService {
   }
 
   getFavoritesTvShows(): Observable<TvShow[]> {
-    const tvShows$ = this._mapIdsIntoFavoriteTvShowsRequests();
-    return forkJoin(tvShows$).pipe(
-      map((shows) => {
-        return this._sortTvShows(shows);
-      })
+    return this.favoriteTvShowsIds$.pipe().pipe(
+      map((ids) => this._mapIdsIntoFavoriteTvShowsRequests(ids)),
+      switchMap((tvShows$) =>
+        forkJoin(tvShows$).pipe(
+          map((shows) => {
+            return this._sortTvShows(shows);
+          })
+        )
+      )
     );
   }
 
-  private _mapIdsIntoFavoriteTvShowsRequests(): Observable<TvShow>[] {
-    const favoritesIds = this._favoriteTvShowsIdsSubject$.getValue();
-    if (!favoritesIds.length) return [];
-    return favoritesIds.map((id) => {
+  private _mapIdsIntoFavoriteTvShowsRequests(ids: number[]): Observable<TvShow>[] {
+    if (!ids.length) return [];
+    return ids.map((id) => {
       if (this.favoriteTvShows[id]) return of(this.favoriteTvShows[id]);
       return this.getTvShow(id);
     });
@@ -88,10 +94,10 @@ export class TvShowService {
   }
 
   private _sortByReleaseDateFn(a: TvShow, b: TvShow): number {
-    return Date.parse(a.countdown?.air_date || "0") - Date.parse(b.countdown?.air_date || "0");
+    return compareDesc(a.countdown?.air_date || "", b.countdown?.air_date || "");
   }
 
   private _sortByStatusFn(a: TvShow, b: TvShow): number {
-    return TV_SHOW_STATUSES.indexOf(b.status) - TV_SHOW_STATUSES.indexOf(a.status);
+    return TV_SHOW_STATUSES_ORDER.indexOf(b.status) - TV_SHOW_STATUSES_ORDER.indexOf(a.status);
   }
 }

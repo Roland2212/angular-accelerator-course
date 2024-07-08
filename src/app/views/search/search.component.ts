@@ -8,13 +8,14 @@ import { TV_SHOWS_TABLE_COLUMNS } from "./search.config";
 import { IsFavoritePipe } from "../../pipe/is-favorite.pipe";
 import { Router } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
+import { ToggleFavoriteDirective } from "../../components/directives/toggle-favorite.directive";
 
 @Component({
   selector: "app-search-view",
   templateUrl: "./search.component.html",
   styleUrl: "./search.component.css",
   standalone: true,
-  imports: [ReactiveFormsModule, GenericTableComponent, IsFavoritePipe, AsyncPipe],
+  imports: [ReactiveFormsModule, GenericTableComponent, IsFavoritePipe, AsyncPipe, ToggleFavoriteDirective],
 })
 export class SearchViewComponent implements OnInit {
   private _filterSubject$ = new ReplaySubject<string>();
@@ -44,10 +45,6 @@ export class SearchViewComponent implements OnInit {
   onSearchTVShows(): void {
     const filter = this.filterControl.value || "";
     this._filterSubject$.next(filter);
-  }
-
-  onToggleFavorite(tvShowId: number): void {
-    this.tvShowService.toggleFavorite(tvShowId);
   }
 
   onNavigateToDetails(tvShowId: number): void {

@@ -5,18 +5,14 @@
     </h5>
     <div class="actions">
       <span class="icon-info" (click)="onNavigateToDetails(tvShow.id)"></span>
-      <span class="icon-bookmark highlight" (click)="onToggleFavorites(tvShow.id)"></span>
+      <span class="icon-bookmark highlight" toggleFavorite [id]="tvShow.id"></span>
     </div>
   </div>
-  <img [src]="tvShow.image_path" class="section media" />
+  <img [src]="tvShow.image_path" class="section media" toggleFavorite [id]="tvShow.id" />
   <div class="section">
     <p>
-      Next Episode:
-      <span *ngIf="tvShow.countdown?.air_date; else noInfo">
-        {{ tvShow.countdown.air_date || "" | date : "MMM dd y" }}
-      </span>
+      {{ tvShow.status | countdown : tvShow.countdown?.air_date || "" }}
     </p>
-    <p>Status: {{ tvShow.status }}</p>
   </div>
 </div>
 

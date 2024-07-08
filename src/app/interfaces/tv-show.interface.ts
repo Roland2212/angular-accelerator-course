@@ -8,17 +8,26 @@ export interface TvShowBase {
   end_date: string;
   country: string;
   network: string;
-  status: TvShowStatus;
+  status: TvShowStatusT;
   image_thumbnail_path: string;
 }
 
-export type TvShowStatus =
+export type TvShowStatusT =
   | "Ended"
   | "Canceled/Ended"
   | "Running"
   | "New Series"
   | "In Development"
   | "To Be Determined";
+
+export enum TvShowStatusE {
+  ENDED = "Ended",
+  CANCELED_ENDED = "Canceled/Ended",
+  RUNNING = "Running",
+  NEW_SERIES = "New Series",
+  IN_DEVELOPMENT = "In Development",
+  TO_BE_DETERMINED = "To Be Determined",
+}
 
 export interface TvShowsTable extends Table<TvShowBase> {
   tv_shows: TvShowBase[];
@@ -37,7 +46,7 @@ export interface TvShow extends TvShowBase {
   image_path: string;
   rating: number;
   rating_count: string;
-  countdown: Episode;
+  countdown: Episode | null;
   genres: string[];
   pictures: string[];
   episodes: Episode[];
