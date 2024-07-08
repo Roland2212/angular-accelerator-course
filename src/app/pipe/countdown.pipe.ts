@@ -7,7 +7,7 @@ import { formatDistanceToNow } from "date-fns";
   standalone: true,
 })
 export class CountdownPipe implements PipeTransform {
-  transform(status: TvShowStatusT, airDate: string) {
+  transform(status: TvShowStatusT, airDate: string): string {
     if (airDate) {
       return `Next episode in ${formatDistanceToNow(airDate)}`;
     }

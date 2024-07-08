@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input } from "@angular/core";
+import { Directive, HostBinding, HostListener, Input } from "@angular/core";
 import { TvShowService } from "../services/tv-show.service";
 
 @Directive({
@@ -6,11 +6,11 @@ import { TvShowService } from "../services/tv-show.service";
   standalone: true,
 })
 export class ToggleFavoriteDirective {
-  @Input()
+  @Input({ alias: "toggleFavorite" })
   id!: number;
 
   @HostListener("click")
-  onClick(): void {
+  toggleFavorite(): void {
     this.tvShowService.toggleFavorite(this.id);
   }
 
