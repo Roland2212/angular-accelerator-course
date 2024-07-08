@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, TemplateRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, TemplateRef } from "@angular/core";
 import { NgFor, NgIf, NgTemplateOutlet } from "@angular/common";
 import {
   BehaviorSubject,
@@ -20,6 +20,7 @@ import { GenericObject } from "../../interfaces/generic-type.interface";
   styleUrl: "./generic-table.component.css",
   standalone: true,
   imports: [NgIf, NgFor, NgTemplateOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericTableComponent<T extends GenericObject, U extends Table<T>> implements OnInit, OnDestroy {
   @Input() columns!: TableColumn[];
@@ -35,6 +36,7 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
   pages: number = 0;
   page: number = 0;
   isLoading: boolean = true;
+  previousFilter: string = "";
 
   get page$(): Observable<number> {
     return this._pageSubject$.asObservable();
@@ -52,27 +54,17 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
     this._subscriptions$.unsubscribe();
   }
 
-  onFirstPage(): void {
+  onPreviousPage(first: boolean = false): void {
     if (this.page <= 1) return;
-    this.page = 1;
+    if (first) this.page = 1;
+    else this.page = this.page - 1;
     this._pageSubject$.next(this.page);
   }
 
-  onPreviousPage(): void {
-    if (this.page <= 1) return;
-    this.page = this.page - 1;
-    this._pageSubject$.next(this.page);
-  }
-
-  onNextPage(): void {
+  onNextPage(last: boolean = false): void {
     if (this.page >= this.pages) return;
-    this.page = this.page + 1;
-    this._pageSubject$.next(this.page);
-  }
-
-  onLastPage(): void {
-    if (this.page >= this.pages) return;
-    this.page = this.pages;
+    if (last) this.page = this.pages;
+    else this.page = this.page + 1;
     this._pageSubject$.next(this.page);
   }
 
@@ -90,9 +82,11 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
           switchMap(([page, filter]) =>
             this.data$(filter, page).pipe(
               tap((tableData) => {
-                this.page = page;
+                if (filter !== this.previousFilter) this.page = 1;
+                else this.page = tableData.page;
                 this.pages = tableData.pages;
                 this.dataSource = tableData.data;
+                this.previousFilter = filter;
               }),
               catchError((error) => {
                 return error;

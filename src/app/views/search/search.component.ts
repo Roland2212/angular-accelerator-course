@@ -8,7 +8,7 @@ import { TV_SHOWS_TABLE_COLUMNS } from "./search.config";
 import { IsFavoritePipe } from "../../pipe/is-favorite.pipe";
 import { Router } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
-import { ToggleFavoriteDirective } from "../../components/directives/toggle-favorite.directive";
+import { ToggleFavoriteDirective } from "../../directives/toggle-favorite.directive";
 
 @Component({
   selector: "app-search-view",

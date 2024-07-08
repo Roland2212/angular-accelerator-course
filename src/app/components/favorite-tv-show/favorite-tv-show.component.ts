@@ -1,9 +1,9 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { TvShow } from "../../interfaces/tv-show.interface";
 import { Router } from "@angular/router";
 import { DatePipe, NgIf } from "@angular/common";
 import { CountdownPipe } from "../../pipe/countdown.pipe";
-import { ToggleFavoriteDirective } from "../directives/toggle-favorite.directive";
+import { ToggleFavoriteDirective } from "../../directives/toggle-favorite.directive";
 
 @Component({
   selector: "app-favorite-tv-show",
@@ -11,6 +11,7 @@ import { ToggleFavoriteDirective } from "../directives/toggle-favorite.directive
   styleUrl: "./favorite-tv-show.component.css",
   standalone: true,
   imports: [DatePipe, NgIf, CountdownPipe, ToggleFavoriteDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FavoriteTvShowComponent {
   @Input() tvShow!: TvShow;

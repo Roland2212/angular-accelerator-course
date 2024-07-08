@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from "@angular/core";
-import { TvShowService } from "../../services/tv-show.service";
+import { TvShowService } from "../services/tv-show.service";
 
 @Directive({
   selector: "[toggleFavorite]",
