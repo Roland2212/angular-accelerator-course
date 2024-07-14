@@ -1,0 +1,25 @@
+dialog {
+    width: 600px;
+    border:  none;
+    outline: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 16px;
+}
+
+.close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

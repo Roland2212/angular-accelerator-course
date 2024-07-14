@@ -1,0 +1,12 @@
+<dialog #dialog>
+  <div class="header">
+    <ng-content select="[header]"></ng-content>
+    <span class="close" (click)="onClose()">X</span>
+  </div>
+  <div class="body">
+    <ng-content select="[body]"></ng-content>
+  </div>
+  <div class="footer">
+    <ng-content select="[footer]"></ng-content>
+  </div>
+</dialog>

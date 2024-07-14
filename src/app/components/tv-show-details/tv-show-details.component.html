@@ -2,15 +2,13 @@
   <button class="small" (click)="onNavigateBack()">Back</button>
   <div class="row">
     <div class="col-lg-2 col-md-4 col-sm-12">
-      <div class="card fluid">
-        <img [src]="tvShow.image_path" class="section media" />
-        <div class="section">
-          <h4>
-            Rating: {{ tvShow.rating | number : "1.1-2" }} / 10
-            <small>(rated by {{ tvShow.rating_count }} people)</small>
-          </h4>
-        </div>
-      </div>
+      <app-tv-show-card [title]="tvShow.name">
+        <img body [src]="tvShow.image_path" class="media clickable" (click)="onOpenGalleryDialog()" />
+        <h4 footer>
+          Rating: {{ tvShow.rating | number : "1.1-2" }} / 10
+          <small>(rated by {{ tvShow.rating_count }} people)</small>
+        </h4>
+      </app-tv-show-card>
     </div>
     <div class="col-lg-10 col-md-8 col-sm-12">
       <div class="card fluid">
@@ -34,3 +32,15 @@
     </div>
   </div>
 </div>
+
+<app-generic-dialog #galleryDialog>
+  <h3 header>{{ tvShow.name }}</h3>
+  <div body class="gallery">
+    <img class="image-selected" [src]="currentImageSrc || tvShow.image_path" />
+    <div class="image-list">
+      <ng-container *ngFor="let imageSrc of tvShow.pictures">
+        <img class="image-list-item" [src]="imageSrc" (click)="onSelectImage(imageSrc)" />
+      </ng-container>
+    </div>
+  </div>
+</app-generic-dialog>

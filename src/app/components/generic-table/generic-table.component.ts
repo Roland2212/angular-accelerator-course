@@ -48,6 +48,7 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
 
   ngOnInit(): void {
     this._getTableData();
+    this._onFilterChanges();
   }
 
   ngOnDestroy(): void {
@@ -82,11 +83,9 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
           switchMap(([page, filter]) =>
             this.data$(filter, page).pipe(
               tap((tableData) => {
-                if (filter !== this.previousFilter) this.page = 1;
-                else this.page = tableData.page;
+                this.page = tableData.page;
                 this.pages = tableData.pages;
                 this.dataSource = tableData.data;
-                this.previousFilter = filter;
               }),
               catchError((error) => {
                 return error;
@@ -96,6 +95,22 @@ export class GenericTableComponent<T extends GenericObject, U extends Table<T>> 
               })
             )
           )
+        )
+        .subscribe()
+    );
+  }
+
+  private _onFilterChanges(): void {
+    this._subscriptions$.add(
+      this.filter$
+        .pipe(
+          tap((filter) => {
+            if (filter !== this.previousFilter) {
+              this.page = 1;
+              this._pageSubject$.next(this.page);
+            }
+            this.previousFilter = filter;
+          })
         )
         .subscribe()
     );

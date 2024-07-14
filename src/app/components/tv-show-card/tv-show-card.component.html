@@ -1,0 +1,12 @@
+<div class="card fluid">
+  <div class="section header">
+    <h5>{{ title }}</h5>
+    <ng-content select="[header]"></ng-content>
+  </div>
+  <div class="section body">
+    <ng-content select="[body]"></ng-content>
+  </div>
+  <div class="section footer">
+    <ng-content select="[footer]"></ng-content>
+  </div>
+</div>

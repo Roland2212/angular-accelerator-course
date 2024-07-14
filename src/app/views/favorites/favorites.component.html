@@ -3,7 +3,18 @@
     <ng-container *ngIf="tvShows$ | async as tvShows">
       <ng-container *ngIf="tvShows.length; else noData">
         <div class="col-lg-2 col-md-4 col-sm-6" *ngFor="let tvShow of tvShows; trackBy: trackById">
-          <app-favorite-tv-show [tvShow]="tvShow"></app-favorite-tv-show>
+          <app-tv-show-card [title]="tvShow.name">
+            <div header class="actions">
+              <span class="icon-info" (click)="onNavigateToDetails(tvShow.id)"></span>
+              <span class="icon-bookmark highlight" [toggleFavorite]="tvShow.id"></span>
+            </div>
+            <img body [src]="tvShow.image_path" class="media" [toggleFavorite]="tvShow.id" />
+            <div footer>
+              <p>
+                {{ tvShow.status | countdown : tvShow.countdown?.air_date || "" }}
+              </p>
+            </div>
+          </app-tv-show-card>
         </div>
       </ng-container>
     </ng-container>

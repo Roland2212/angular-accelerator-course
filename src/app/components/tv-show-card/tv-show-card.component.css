@@ -1,0 +1,8 @@
+.card {
+    height: 500px;
+}
+
+.card .body {
+    padding: 0;
+    height: 300px;
+}
